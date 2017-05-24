@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<title>Simple Photo Gallery with HTML and JavaScript</title>
+		<style type="text/css">
+			body {
+				background: #ddd;
+				margin: 0;
+			}
+			.thumbnails img {
+				height: 80px;
+				border: 2px solid #555;
+				margin: 0 2px;
+			}
+
+			.thumbnails img:hover {
+				border-color: orange;
+				cursor:pointer;
+			}
+
+			.preview {
+				margin-top: 15px;
+			}
+			.preview img {
+				border: 2px solid #444;
+				width: 100%;
+				max-width: 680px;
+			}
+			div.scroll {
+			    background-color: #ffFFFF;
+			    max-width: 800px;
+			    width: 90%;
+			    height: 100px;
+			    overflow-x: scroll;
+			    overflow-y: hidden;
+			    white-space: nowrap;
+			}
+		</style>
+	</head>
+
+	<body>
+
+	<div class="gallery" align="center">
+		<h3>Simple HTML Photo Gallery with JavaScript</h3>
+		<div class="scroll">
+			<div class="thumbnails">
+				<!--<img onmouseover="preview.src=img1.src" name="img1" src="images/img1.jpg" alt="" />-->
+			</div>
+		</div>
+
+		<div class="preview" align="center">
+			<!--<img name="preview" src="img1.jpg" alt=""/>-->
+		</div>
+
+	</div> <!-- Close the gallery div -->
+	<script>var oReq = new XMLHttpRequest();
+	//oReq.addEventListener("load", reqListener);
+	oReq.onreadystatechange = reqListener;
+	oReq.open("GET", window.location.href + 'images');
+	oReq.send();
+
+	function changePreview (img) {
+		debugger;
+		var previewEl = document.querySelector('img.preview');
+		previewEl.src = img;
+	}
+
+	function reqListener (e) {
+	  if (this.readyState === 4 && this.status === 200)
+	  {
+	    var pics = JSON.parse(e.target.response);
+	    console.log('got backkkk ', e.target.response, pics);
+	    var container = document.getElementsByClassName('thumbnails')[0];
+
+	    var img;
+	    for (var i = 0; i < pics.length; i++) {
+	    	if (i === 0) {
+	    		// Preview for first picture.
+	    		var previewContainer = document.querySelector('.preview');
+	    		var previewFirstImage = document.createElement('img');
+	    		previewFirstImage.setAttribute('name', 'preview');
+	    		previewFirstImage.src = pics[i];
+	    		previewContainer.appendChild(previewFirstImage);
+	    	}
+	        img = document.createElement('img');
+	        img.src = pics[i];
+					img.setAttribute('name', pics[i]);
+	        container.appendChild(img);
+			img.addEventListener('mouseover', function (e) {
+				if (e.target.src) {
+					previewEl = document.querySelector('img[name="preview"]');
+					previewEl.src = e.target.src;
+				}
+			});
+	    }
+	  }
+	}
+	</script>
+	</body>
+</html>
+
+<!--
+http://html-tuts.com/html-photo-gallery-simple-javascript/
+http://html-tuts.com/demo/photo_gallery/
+file:///H:/xampp/htdocs/t/js1/spg.html
+-->
